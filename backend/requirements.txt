@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+requests
+beautifulsoup4
+lxml
+python-dateutil
+sqlalchemy>=2
+aiosqlite
+aiomysql
+pydantic>=2
+pydantic-settings
+scikit-learn
