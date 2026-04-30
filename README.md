@@ -97,6 +97,30 @@ npm run dev
 
 然后重启后端。智能体会变为“检索增强生成（RAG）”。
 
+## LangChain 与 MCP（论文展示向）
+
+本项目后端已集成：
+
+- **LangChain**：用于 OpenAI-compatible（含 DashScope compatible-mode）的大模型调用与提示编排（便于在论文中描述 LCEL/PromptTemplate/Chain 结构）。
+- **MCP（Model Context Protocol）**：提供一个可运行的 MCP Server，把门户能力暴露为工具（tools），便于演示“外部智能体统一调用门户服务”。
+
+### 启动 MCP Server（stdio）
+
+在 `d:\Graduation Project\backend`：
+
+```bash
+python -m pip install -r requirements.txt
+python -m app.mcp_server
+```
+
+MCP Server 提供的工具包括（名称可能随版本调整）：
+
+- `search_articles`：按关键词检索文章
+- `get_article`：按 ID 获取文章详情
+- `assistant_chat`：调用学院智能助手（多智能体协作 + 可选 LLM）
+- `purge_all_chats`：清空全部会话（演示用）
+- `create_manual_article`：通过 MCP 发布手动文章（需要 `ADMIN_TOKEN`）
+
 ## 内容来源
 
 当前爬取源站为浙江工商大学信息与电子工程学院官网（示例：`https://iee.zjgsu.edu.cn/`）。

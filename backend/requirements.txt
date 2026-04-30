@@ -10,3 +10,11 @@ aiomysql
 pydantic>=2
 pydantic-settings
 scikit-learn
+
+# LangChain (thesis: LCEL / prompt templates / tool calls)
+langchain
+langchain-openai
+langchain-community
+
+# MCP (Model Context Protocol) server/tools
+mcp

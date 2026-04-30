@@ -29,3 +29,6 @@ __pycache__/
 *.tmp
 *.swp
 Thumbs.db
+
+# Local scratch notes
+z1.txt

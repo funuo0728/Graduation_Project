@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .models import Article
 from .settings import settings
+from .langchain_llm import call_openai_compatible_via_langchain, langchain_available
 
 
 @dataclass(frozen=True)
@@ -158,6 +159,10 @@ async def retrieve(session: AsyncSession, query: str, top_k: int = 6) -> list[di
 
 
 def _call_openai_compatible(messages: list[dict]) -> str:
+    # Prefer LangChain implementation when available (thesis: LangChain integration).
+    if langchain_available():
+        return call_openai_compatible_via_langchain(messages)
+
     base_url = settings.effective_llm_base_url()
     model = settings.effective_llm_model()
     api_key = settings.effective_llm_api_key()

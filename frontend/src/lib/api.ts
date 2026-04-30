@@ -33,6 +33,14 @@ export type ChatResponse = {
   }>
 }
 
+export type TechStatus = {
+  ok: boolean
+  app: string
+  llm?: { enabled: boolean; provider: string; model: string | null }
+  langchain?: { enabled: boolean }
+  mcp?: { tools: string[] }
+}
+
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, {
     ...init,
@@ -46,7 +54,7 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
-  health: () => apiFetch<{ ok: boolean; app: string }>('/api/health'),
+  health: () => apiFetch<TechStatus>('/api/health'),
 
   listArticles: (params: { category?: string; q?: string; limit?: number }) => {
     const usp = new URLSearchParams()

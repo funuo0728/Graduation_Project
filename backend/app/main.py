@@ -7,6 +7,7 @@ from .db import engine
 from .models import Base
 from .routers import admin, agents, articles, scrape
 from .settings import settings
+from .langchain_llm import langchain_available
 
 
 app = FastAPI(title=settings.app_name)
@@ -33,5 +34,30 @@ async def _startup() -> None:
 
 @app.get("/api/health")
 async def health() -> dict:
-    return {"ok": True, "app": settings.app_name}
+    llm_base_url = settings.effective_llm_base_url()
+    llm_model = settings.effective_llm_model()
+    llm_enabled = bool(llm_base_url and llm_model)
+
+    provider = "offline"
+    if settings.llm_base_url:
+        provider = "openai-compatible"
+    elif settings.dashscope_api_key:
+        provider = "dashscope-compatible"
+
+    tools: list[str] = []
+    try:
+        from .mcp_server import mcp
+
+        tool_objs = await mcp.list_tools()
+        tools = [t.name for t in tool_objs]
+    except Exception:
+        tools = []
+
+    return {
+        "ok": True,
+        "app": settings.app_name,
+        "llm": {"enabled": llm_enabled, "provider": provider, "model": llm_model},
+        "langchain": {"enabled": bool(langchain_available())},
+        "mcp": {"tools": tools},
+    }
 
